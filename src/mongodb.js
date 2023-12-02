@@ -8,6 +8,26 @@ mongoose.connect("mongodb://localhost:27017/webdevproject")
     console.log("mongoDB unsuccessful");
 })
 
+const hotelSchema = new mongoose.Schema({
+    hotelName: {
+        type: String,
+        required: true,
+    },
+    hotelId: {
+        type: String,
+        required: true,
+    },
+    reviewScore: {
+        type: Number,
+        required: true,
+    },
+    price: {
+        type: String, // or whatever data type is appropriate for the price
+        required: true,
+    }
+});
+
+
 const LogInSchema = new mongoose.Schema({
     name:{
         type:String,
@@ -16,7 +36,8 @@ const LogInSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    favourites: [hotelSchema]
 })
 
 const collection = new mongoose.model("Collection1", LogInSchema)

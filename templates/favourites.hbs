@@ -32,6 +32,55 @@
         background-image: url('/images/image6.jpg');
         background-size: cover;
     }
+
+  .favorites-container {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 170px;
+  }
+
+  .favorites-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .favorites-container li {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+  }
+
+  .favorites-container li p {
+    margin: 0;
+    font-weight: bold;
+  }
+
+  .favorites-container li {
+  position: relative;   
+  margin-bottom: 20px; 
+  }
+
+.favorites-container li .delete-btn {
+  position: absolute;
+  top: 40px;
+  right: 5px; 
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.favorites-container li .delete-btn:hover {
+  background-color: #c82333;
+}
+
 </style>
 
 </head>
@@ -74,7 +123,7 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link active" href="favourites.html">Favourites</a>
+            <a class="nav-link active" href="favourites">Favourites</a>
           </li>
 
           <li class="nav-item">
@@ -93,6 +142,25 @@
       </div>
     </div>
   </nav><!-- End Header/Navbar -->
+
+  <div class="favorites-container">
+  <h1>My Favorite Hotels</h1>
+  {{#if favourites.length}}
+    <ul>
+      {{#each favourites}}
+        <li>
+          <p>Hotel Name: {{this.hotelName}}</p>
+          <p>Hotel ID: {{this.hotelId}}</p>
+          <p>Review Score: {{this.reviewScore}}</p>
+          <p>Price: {{this.price}}</p>
+          <button class="delete-btn">Delete</button>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>No favourites yet.</p>
+  {{/if}}
+</div>
 
 
     

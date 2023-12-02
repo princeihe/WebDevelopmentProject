@@ -74,7 +74,7 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="favourites.html">Favourites</a>
+            <a class="nav-link" href="favourites">Favourites</a>
           </li>
 
           <li class="nav-item">
@@ -127,7 +127,7 @@
         const locationOptions = {
             method: 'GET',
             headers: {
-                'X-RapidAPI-Key': 'private-key',
+                'X-RapidAPI-Key': '6d0fa0cca5msh71c3aeadc81f814p184e7bjsn1864a7564a79',
                 'X-RapidAPI-Host': 'booking-com.p.rapidapi.com'
             }
         };
@@ -146,7 +146,7 @@
                 const hotelOptions = {
                     method: 'GET',
                     headers: {
-                        'X-RapidAPI-Key': 'private-key',
+                        'X-RapidAPI-Key': '6d0fa0cca5msh71c3aeadc81f814p184e7bjsn1864a7564a79',
                         'X-RapidAPI-Host': 'booking-com.p.rapidapi.com'
                     }
                 };
@@ -205,7 +205,7 @@
 
     async function addToFavorites(hotel) {
     try {
-        const response = await fetch('/add-to-favorites', {
+        const response = await fetch('/add-to-favourites', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -224,6 +224,7 @@
         console.error(error);
     }
 }
+
 
 </script>
   

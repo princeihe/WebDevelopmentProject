@@ -5,6 +5,7 @@ const app = express()
 const path = require("path")
 const hbs = require("hbs")
 const collection = require("./mongodb")
+const User = require("./mongodb");
 
 const templatePath = path.join(__dirname, '../templates')
 const publicPath = path.join(__dirname, '../public');
@@ -156,23 +157,23 @@ app.get("/account/:id", async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   });
-  
-  app.post("/add-to-favorites", async (req, res) => {
+
+
+  app.post("/add-to-favourites", async (req, res) => {
     try {
         // Check if the user is authenticated (you can customize this based on your authentication logic)
-        if (!req.session.userId) {
-            return res.status(401).json({ error: 'Unauthorized' });
-        }
-
+        // if (!req.session.userId) {
+        //     return res.status(401).json({ error: 'Unauthorized' });
+        // }
+  
         const userId = req.session.userId;
         const { hotelId, hotelName, reviewScore, price } = req.body;
-
-        // Find the user by ID and update their favorites
+  
         const updatedUser = await User.findByIdAndUpdate(
             userId,
             {
                 $push: {
-                    favorites: {
+                    favourites: {
                         hotelId,
                         hotelName,
                         reviewScore,
@@ -180,21 +181,27 @@ app.get("/account/:id", async (req, res) => {
                     },
                 },
             },
-            { new: true } // Ensure to get the updated document
+            { new: true }
         );
-
+  
         if (!updatedUser) {
             return res.status(404).json({ error: 'User not found' });
         }
-
-        res.json({ message: 'Hotel added to favorites successfully' });
+  
+        res.json({ message: 'Hotel added to favourites successfully' });
     } catch (error) {
         console.error("Error in /add-to-favorites route:", error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
+  });
+  
+
+
+app.get('/indexlogged', (req, res) => {
+  res.render('indexlogged');
 });
 
-app.get("/favorites", async (req, res) => {
+app.get("/favourites", async (req, res) => {
   try {
       if (!req.session.userId) {
           return res.status(401).send("Unauthorized");
@@ -207,16 +214,11 @@ app.get("/favorites", async (req, res) => {
           return res.status(404).send("User not found");
       }
 
-      res.render("favorites", { favorites: user.favorites });
+      res.render("favourites", { favourites: user.favourites });
   } catch (error) {
-      console.error("Error in /favorites route:", error);
+      console.error("Error in /favourites route:", error);
       res.status(500).send("Internal Server Error");
   }
-});
-
-app.get('/indexlogged', (req, res) => {
-  // Handle the request and render the corresponding page
-  res.render('indexlogged');
 });
 
 
