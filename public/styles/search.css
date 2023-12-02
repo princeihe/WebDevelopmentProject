@@ -1,0 +1,77 @@
+/* styles.css */
+
+/* Form styling */
+#hotelSearchForm {
+    max-width: 400px;
+    margin: 0 auto; /* Center the form horizontally */
+    margin-top: 150px; /* Adjust the top margin for vertical centering */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+    /* Make the form background transparent gray */
+    background-color: rgba(192, 192, 192, 0.8); /* Adjust the RGB values and alpha channel as needed */
+}
+
+#hotelSearchForm label {
+    color: white;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+body {
+    background-image: url('/images/image6.jpg');
+    background-size: cover;
+
+}
+#resultContainer {
+display: flex;
+flex-wrap: wrap;
+background-image: url('/images/image7.jpg');
+}
+
+.hotel {
+    box-sizing: border-box;
+    width: 48%;
+    margin: 1%;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.hotel h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.hotel p {
+    margin: 5px 0;
+    color: #777;
+}
+

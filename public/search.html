@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Hotel Booking</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="/styles/index.css" rel="stylesheet">
+  <link href="/styles/search.css" rel="stylesheet">
+
+</head>
+
+<body>
+  
+  <!-- ======= Property Search Section ======= -->
+  <div class="click-closed"></div>
+  <!--/ Form Search Star /-->
+  <div class="box-collapse">
+    <div class="title-box-d">
+      <h3 class="title-d">Search Hotels</h3>
+    </div>
+    <span class="close-box-collapse right-boxed bi bi-x"></span>
+    <div class="box-collapse-wrap form">
+
+
+    </div>
+  </div><!-- End Property Search Section -->
+
+  <!-- ======= Header/Navbar ======= -->
+  <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
+    <div class="container">
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <a class="navbar-brand text-brand" href="">Hotel<span class="color-b">Booking</span></a>
+
+      <div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+        <ul class="navbar-nav">
+
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link active" href="/search.html">Hotels</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Login</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Register</a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav><!-- End Header/Navbar -->
+  <section id="formSection">
+    <form id="hotelSearchForm">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required>
+
+        <label for="checkinDate">Check-in Date:</label>
+        <input type="date" id="checkinDate" name="checkinDate" required>
+
+        <label for="checkoutDate">Check-out Date:</label>
+        <input type="date" id="checkoutDate" name="checkoutDate" required>
+
+        <button type="button" onclick="searchHotels()">Search Hotels</button>
+    </form>
+</section>
+
+<div id="resultContainer"></div>
+
+
+
+  <!-- Vendor JS Files -->
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="/vendor/php-email-form/validate.js"></script>
+
+  <script>
+    async function searchHotels() {
+
+        const location = document.getElementById('location').value;
+        const checkinDate = document.getElementById('checkinDate').value;
+        const checkoutDate = document.getElementById('checkoutDate').value;
+
+        // First API call to get location information
+        const locationUrl = `https://booking-com.p.rapidapi.com/v1/hotels/locations?name=${location}&locale=en-gb`;
+        const locationOptions = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': 'private-key',
+                'X-RapidAPI-Host': 'booking-com.p.rapidapi.com'
+            }
+        };
+
+        try {
+            const locationResponse = await fetch(locationUrl, locationOptions);
+            const locationResult = await locationResponse.json();
+
+            // Check if location information is available
+            if (locationResult.length > 0) {
+                const destId = locationResult[0].dest_id;
+
+                // Second API call to search for hotels using location information
+                const hotelUrl = `https://booking-com.p.rapidapi.com/v1/hotels/search?units=metric&dest_id=${destId}&dest_type=city&room_number=1&checkin_date=${checkinDate}&order_by=popularity&locale=en-gb&adults_number=2&checkout_date=${checkoutDate}&filter_by_currency=AED&page_number=0&children_number=2&children_ages=5%2C0&categories_filter_ids=class%3A%3A2%2Cclass%3A%3A4%2Cfree_cancellation%3A%3A1&include_adjacency=true`;
+
+                const hotelOptions = {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': 'private-key',
+                        'X-RapidAPI-Host': 'booking-com.p.rapidapi.com'
+                    }
+                };
+
+                const hotelResponse = await fetch(hotelUrl, hotelOptions);
+                const hotelResult = await hotelResponse.json();
+
+                // Display the hotel results
+                displayResults(hotelResult);
+            } else {
+                console.error('Location not found.');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+
+        document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function displayResults(data) {
+        const resultContainer = document.getElementById('resultContainer');
+        
+        // Clear previous results
+        resultContainer.innerHTML = '';
+    
+        // Display hotel information
+        data.result.forEach(hotel => {
+            const hotelDiv = document.createElement('div');
+            hotelDiv.classList.add('hotel');
+    
+            const hotelName = document.createElement('h2');
+            hotelName.textContent = hotel.hotel_name;
+    
+            const reviewScore = document.createElement('p');
+            reviewScore.textContent = `Review Score: ${hotel.review_score}`;
+            
+            const hotelID = document.createElement('p');
+            hotelID.textContent = `Hotel ID: ${hotel.hotel_id}`;
+    
+            const price = document.createElement('p');
+            price.textContent = `Price: ${hotel.composite_price_breakdown.gross_amount_per_night.value} ${hotel.composite_price_breakdown.gross_amount_per_night.currency}`;
+
+            hotelDiv.appendChild(hotelName);
+            hotelDiv.appendChild(reviewScore);
+            hotelDiv.appendChild(price);
+            hotelDiv.appendChild(hotelID);
+    
+            resultContainer.appendChild(hotelDiv);
+        });
+    }
+</script>
+  
+</body>
+
+</html>
