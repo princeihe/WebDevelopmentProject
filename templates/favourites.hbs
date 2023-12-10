@@ -153,17 +153,53 @@
           <p>Hotel ID: {{this.hotelId}}</p>
           <p>Review Score: {{this.reviewScore}}</p>
           <p>Price: {{this.price}}</p>
-          <button class="delete-btn">Delete</button>
+          <!-- Add data attribute with hotelId -->
+          <button class="delete-btn" data-hotel-id="{{this.hotelId}}">Delete</button>
         </li>
       {{/each}}
     </ul>
+
   {{else}}
     <p>No favourites yet.</p>
   {{/if}}
 </div>
 
 
-    
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Add a click event listener to all delete buttons
+  const deleteButtons = document.querySelectorAll(".delete-btn");
+
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      // Get the hotelId from the data attribute
+      const hotelId = button.getAttribute("data-hotel-id");
+
+      // Make a POST request to your server to remove the hotel from favorites
+      try {
+        const response = await fetch("/remove-from-favourites", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ hotelId }),
+        });
+
+        if (response.ok) {
+          // Update the UI or reload the page as needed
+          location.reload(); // For simplicity, you might want to update the UI without a full page reload
+        } else {
+          console.error("Failed to remove hotel from favorites:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error removing hotel from favorites:", error);
+      }
+    });
+  });
+});
+
+</script>
+
 </body>
 
 </html>

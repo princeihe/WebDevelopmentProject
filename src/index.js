@@ -221,6 +221,50 @@ app.get("/favourites", async (req, res) => {
   }
 });
 
+app.post("/remove-from-favourites", async (req, res) => {
+  try {
+      // Check if the user is authenticated
+      if (!req.session.userId) {
+          return res.status(401).json({ error: 'Unauthorized' });
+      }
+
+      const userId = req.session.userId;
+      const { hotelId } = req.body;
+
+      // Update the user document by removing the hotel from the favorites array
+      const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          {
+              $pull: {
+                  favourites: { hotelId: hotelId }
+              }
+          },
+          { new: true }
+      );
+
+      if (!updatedUser) {
+          return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.json({ message: 'Hotel removed from favourites successfully' });
+  } catch (error) {
+      console.error("Error in /remove-from-favourites route:", error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get("/logout", (req, res) => {
+  // Destroy the session to log out the user
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      res.status(500).send("Internal Server Error");
+    } else {
+      res.redirect("/");
+    }
+  });
+});
+
 
 app.listen(3000,()=>{
     console.log("port connected");
