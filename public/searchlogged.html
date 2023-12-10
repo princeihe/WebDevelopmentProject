@@ -219,10 +219,14 @@
 
         const data = await response.json();
         console.log(data); // Log the server's response
+
+        // Display an alert when the hotel is added to favorites
+        alert('Hotel added to favourites');
     } catch (error) {
         console.error(error);
     }
 }
+
 
 
 </script>
